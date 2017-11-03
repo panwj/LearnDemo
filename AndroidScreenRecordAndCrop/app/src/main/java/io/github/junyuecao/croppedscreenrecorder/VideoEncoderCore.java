@@ -74,6 +74,7 @@ public class VideoEncoderCore {
     private int mATrackIndex;
     private boolean mMuxerStarted;
     private boolean mStreamEnded;
+    private boolean mPause;
     private long mRecordStartedAt = 0;
 
     private RecordCallback mCallback;
@@ -242,6 +243,14 @@ public class VideoEncoderCore {
         mCallback = callback;
     }
 
+    public void setPause(boolean pause) {
+        mPause = pause;
+    }
+
+    public boolean getPause() {
+        return mPause;
+    }
+
     /**
      * Extracts all pending data from the encoder and forwards it to the muxer.
      * <p>
@@ -305,7 +314,7 @@ public class VideoEncoderCore {
                         encoderStatus);
                 // let's ignore it
             } else {
-                if (mMuxerStarted) {
+                if (mMuxerStarted && !mPause) {
                     // same as mVideoEncoder.getOutputBuffer(encoderStatus)
                     ByteBuffer encodedData = mVideoEncoder.getOutputBuffer(encoderStatus);
 
@@ -384,7 +393,7 @@ public class VideoEncoderCore {
                 mATrackIndex = mMuxer.addTrack(mAudioEncoder.getOutputFormat());
                 tryStartMuxer();
             } else if (index >= 0) {
-                if (mMuxerStarted) {
+                if (mMuxerStarted && !mPause) {
                     if ((mABufferInfo.flags & MediaCodec.BUFFER_FLAG_CODEC_CONFIG) != 0) {
                         // ignore codec config
                         mABufferInfo.size = 0;

@@ -39,16 +39,16 @@ public final class EglCore {
      * pixel format that cannot be converted efficiently to something usable by the video
      * encoder.
      */
-    public static final int FLAG_RECORDABLE = 0x01;
+    public static final int FLAG_RECORDABLE = 0x01;//1
 
     /**
      * Constructor flag: ask for GLES3, fall back to GLES2 if not available.  Without this
      * flag, GLES2 is used.
      */
-    public static final int FLAG_TRY_GLES3 = 0x02;
+    public static final int FLAG_TRY_GLES3 = 0x02;//2
 
     // Android-specific extension.
-    private static final int EGL_RECORDABLE_ANDROID = 0x3142;
+    private static final int EGL_RECORDABLE_ANDROID = 0x3142;//12610
 
     private EGLDisplay mEGLDisplay = EGL14.EGL_NO_DISPLAY;
     private EGLContext mEGLContext = EGL14.EGL_NO_CONTEXT;
@@ -80,7 +80,7 @@ public final class EglCore {
             sharedContext = EGL14.EGL_NO_CONTEXT;
         }
 
-        //获取显示设备
+        //EGLDisplay代表一个抽象屏幕
         mEGLDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
         if (mEGLDisplay == EGL14.EGL_NO_DISPLAY) {
             throw new RuntimeException("unable to get EGL14 display");
@@ -93,6 +93,7 @@ public final class EglCore {
         }
 
         // Try to get a GLES3 context, if requested.
+        Log.d(TAG, "(flags & FLAG_TRY_GLES3) = " + (flags & FLAG_TRY_GLES3));
         if ((flags & FLAG_TRY_GLES3) != 0) {
             Log.d(TAG, "Trying GLES 3");
             EGLConfig config = getConfig(flags, 3);
@@ -169,6 +170,7 @@ public final class EglCore {
         }
         EGLConfig[] configs = new EGLConfig[1];
         int[] numConfigs = new int[1];
+        //传入需求的属性列表看是否有合适的 config
         if (!EGL14.eglChooseConfig(mEGLDisplay, attribList, 0, configs, 0, configs.length,
                 numConfigs, 0)) {
             Log.w(TAG, "unable to find RGB8888 / " + version + " EGLConfig");

@@ -44,6 +44,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mStart.setVisibility(View.VISIBLE);
                 mScreenCapture.stopProjection();
                 break;
+            case R.id.pause:
+                mScreenCapture.pauseRecording();
+                break;
         }
     }
 
@@ -103,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mStart.setOnClickListener(this);
         mCancel.setOnClickListener(this);
         mRecord.setOnTouchListener(this);
+        findViewById(R.id.pause).setOnClickListener(this);
     }
 
     @Override

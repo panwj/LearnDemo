@@ -90,6 +90,7 @@ public class TextureMovieEncoder implements Runnable, SurfaceTexture.OnFrameAvai
     private final Object mReadyFence = new Object();      // guards ready/running
     private boolean mReady;
     private boolean mRunning;//表示守护线程（mReadyFence）已经运行
+    private boolean mPause;
     private Callback mCallback;
     private HandlerThread mVideoFrameSender;
     private Handler mVideoFrameHandler;
@@ -173,6 +174,25 @@ public class TextureMovieEncoder implements Runnable, SurfaceTexture.OnFrameAvai
         }
         // We don't know when these will actually finish (or even start).  We don't want to
         // delay the UI thread though, so we return immediately.
+    }
+
+    public void pauseRecording() {
+        synchronized (mReadyFence) {
+            if (isRecording()) {
+                if (!mPause) {
+                    mPause = true;
+                    if (mVideoEncoder != null) {
+                        mVideoEncoder.setPause(mPause);
+                    }
+                } else {
+                    mPause = false;
+                    if (mVideoEncoder != null) {
+                        mVideoEncoder.setPause(mPause);
+                    }
+                    Log.d(TAG, "pauseRecording() ---------------   pause ---> resume success");
+                }
+            }
+        }
     }
 
     /**

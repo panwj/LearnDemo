@@ -146,7 +146,7 @@ public class ScreenCapture {
      */
     public synchronized boolean attachRecorder() {
         Log.d(TAG, "Start attachRecorder");
-        if (!running ) {
+        if (!running ) {//running代表获取 media projection 成功
             // if not projecting screen or already recording return false
             requestScreenCapture();
             return false;
@@ -231,6 +231,13 @@ public class ScreenCapture {
             mediaProjection = null;
         }
 
+        return true;
+    }
+
+    public boolean pauseRecording() {
+        if (mRecorder != null) {
+            mRecorder.pauseRecording();
+        }
         return true;
     }
 

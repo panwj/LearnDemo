@@ -40,6 +40,7 @@ public class EglSurfaceBase {
     // EglCore object we're associated with.  It may be associated with multiple surfaces.
     protected EglCore mEglCore;
 
+    //这个EGLSurface是特殊的，将WindowSurface attach 到mVideoEncoder.createInputSurface();创建的Surface
     private EGLSurface mEGLSurface = EGL14.EGL_NO_SURFACE;
     private int mWidth = -1;
     private int mHeight = -1;
