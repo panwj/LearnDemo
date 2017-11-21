@@ -48,7 +48,7 @@ import java.util.TimerTask;
 @RequiresApi(LOLLIPOP)
 public class VideoEncoderCore {
     private static final String TAG = "VideoEncoderCore";
-    private static final boolean VERBOSE = true;
+    private static final boolean VERBOSE = false;
     private static final int TIMEOUT_USER = 10000;
     public static final int DEFAULT_SAMPLE_RATE = 48000;
     public static final int DEFAULT_CHANNEL_CONFIG = 1;
@@ -445,7 +445,7 @@ public class VideoEncoderCore {
         while (!done) {
             // Start to put data to InputBuffer
             int index = mAudioEncoder.dequeueInputBuffer(TIMEOUT_USER);
-            if (index >= 0) { // In case we didn't get any input buffer, it may be blocked by all output buffers being
+            if (index >= 0 && !mPause) { // In case we didn't get any input buffer, it may be blocked by all output buffers being
                 // full, thus try to drain them below if we didn't get any
                 ByteBuffer in = mAudioEncoder.getInputBuffer(index);
                 in.clear();

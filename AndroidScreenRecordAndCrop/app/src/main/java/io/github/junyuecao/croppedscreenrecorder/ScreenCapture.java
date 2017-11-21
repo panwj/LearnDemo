@@ -199,8 +199,12 @@ public class ScreenCapture {
             mAudioThread = null;
         }
         if (mAudioRecord != null) {
-            mAudioRecord.stop();
-            mAudioRecord.release();
+            try {
+                mAudioRecord.stop();
+                mAudioRecord.release();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             mAudioRecord = null;
         }
 
